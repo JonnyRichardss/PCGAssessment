@@ -91,7 +91,7 @@ UPARAM(DisplayName = "Target Mesh")UDynamicMesh* UJR_SphereGenerator::AppendIcoS
 			EditMesh.AppendTriangle(9, 8, 1);
 			maxFaceIdx = 19;
 
-			
+			/*
 			for (int j = 0; j < iterations; j++)
 			{
 				for (int i=0;i<maxFaceIdx;i++)
@@ -111,6 +111,7 @@ UPARAM(DisplayName = "Target Mesh")UDynamicMesh* UJR_SphereGenerator::AppendIcoS
 				faces = faces2;
 			}
 			
+			*/
 
 		}, EDynamicMeshChangeType::GeneralEdit, EDynamicMeshAttributeChangeFlags::Unknown, false);
 
