@@ -11,6 +11,11 @@
 //fwd dec 
 struct FGeometryScriptVectorList;
 struct FCraterSettings;
+namespace UE {
+	namespace Geometry {
+		class FDynamicMesh3;
+	}
+};
 extern class UDynamicMesh;
 UCLASS()
 class TESTGRAPHICSANDPCG_API UJR_SphereGenerator : public UBlueprintFunctionLibrary
@@ -45,4 +50,5 @@ private:
 	static float LowBiasedRNG(float bias);
 	static float smin(float a, float b, float k);
 	static float smax(float a, float b, float k);
+	static int AppendMidPoint(int a, int b,UE::Geometry::FDynamicMesh3& EditMesh);
 };
