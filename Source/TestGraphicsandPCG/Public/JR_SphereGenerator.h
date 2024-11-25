@@ -50,5 +50,5 @@ private:
 	static float LowBiasedRNG(float bias);
 	static float smin(float a, float b, float k);
 	static float smax(float a, float b, float k);
-	static int AppendMidPoint(int a, int b,UE::Geometry::FDynamicMesh3& EditMesh);
+	static int AppendMidPoint(int a, int b,UE::Geometry::FDynamicMesh3* EditMesh);
 };

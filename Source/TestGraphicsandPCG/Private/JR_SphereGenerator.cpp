@@ -45,58 +45,61 @@ UPARAM(DisplayName = "Target Mesh")UDynamicMesh* UJR_SphereGenerator::AppendIcoS
 	int tesco=0;
 	//http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
 	double t = (1.0 + FMath::Sqrt(5.0)) / 2.0;
-	TargetMesh->EditMesh([&](FDynamicMesh3 EditMesh)
+	
+
+	auto EditMesh = TargetMesh->GetMeshPtr();
 		{
 
 			//inital vertices
-			EditMesh.AppendVertex(FVector3d(-1, t , 0));
-			EditMesh.AppendVertex(FVector3d(1 , t , 0));
-			EditMesh.AppendVertex(FVector3d(-1, -t, 0));
-			EditMesh.AppendVertex(FVector3d(1 , -t, 0));
-
-			EditMesh.AppendVertex(FVector3d(0,-1,t ));
-			EditMesh.AppendVertex(FVector3d(0,1 ,t ));
-			EditMesh.AppendVertex(FVector3d(0,-1,-t));
-			EditMesh.AppendVertex(FVector3d(0,1 ,-t));
-
-			EditMesh.AppendVertex(FVector3d(t, 0, -1));
-			EditMesh.AppendVertex(FVector3d(t,0,1));
-			EditMesh.AppendVertex(FVector3d(-t,0,-1));
-			EditMesh.AppendVertex(FVector3d(-t,0,1));
+			EditMesh->AppendVertex(FVector3d(-1, t , 0));
+			EditMesh->AppendVertex(FVector3d(1 , t , 0));
+			EditMesh->AppendVertex(FVector3d(-1, -t, 0));
+			EditMesh->AppendVertex(FVector3d(1 , -t, 0));
+					
+			EditMesh->AppendVertex(FVector3d(0,-1,t ));
+			EditMesh->AppendVertex(FVector3d(0,1 ,t ));
+			EditMesh->AppendVertex(FVector3d(0,-1,-t));
+			EditMesh->AppendVertex(FVector3d(0,1 ,-t));
+					
+			EditMesh->AppendVertex(FVector3d(t, 0, -1));
+			EditMesh->AppendVertex(FVector3d(t,0,1));
+			EditMesh->AppendVertex(FVector3d(-t,0,-1));
+			EditMesh->AppendVertex(FVector3d(-t,0,1));
 
 
 			//initial faces
-			EditMesh.AppendTriangle(0, 11, 5);
-			EditMesh.AppendTriangle(0, 5, 1);
-			EditMesh.AppendTriangle(0, 1, 7);
-			EditMesh.AppendTriangle(0, 7, 10);
-			EditMesh.AppendTriangle(0, 10, 11);
-
-			EditMesh.AppendTriangle(1, 5, 9);
-			EditMesh.AppendTriangle(5, 11, 4);
-			EditMesh.AppendTriangle(11, 10, 2);
-			EditMesh.AppendTriangle(10, 7, 6);
-			EditMesh.AppendTriangle(7, 1, 8);
-
-			EditMesh.AppendTriangle(3, 9, 4);
-			EditMesh.AppendTriangle(3, 4, 2);
-			EditMesh.AppendTriangle(3, 2, 6);
-			EditMesh.AppendTriangle(3, 6, 8);
-			EditMesh.AppendTriangle(3, 8, 9);
-
-			EditMesh.AppendTriangle(4, 9, 5);
-			EditMesh.AppendTriangle(2, 4, 11);
-			EditMesh.AppendTriangle(6, 2, 10);
-			EditMesh.AppendTriangle(8, 6, 7);
-			EditMesh.AppendTriangle(9, 8, 1);
-
-			TArray<FIntVector3> trisToAdd;
-			TArray<int> trisToRemove;
+			EditMesh->AppendTriangle(0, 11, 5);
+			EditMesh->AppendTriangle(0, 5, 1);
+			EditMesh->AppendTriangle(0, 1, 7);
+			EditMesh->AppendTriangle(0, 7, 10);
+			EditMesh->AppendTriangle(0, 10, 11);
+					
+			EditMesh->AppendTriangle(1, 5, 9);
+			EditMesh->AppendTriangle(5, 11, 4);
+			EditMesh->AppendTriangle(11, 10, 2);
+			EditMesh->AppendTriangle(10, 7, 6);
+			EditMesh->AppendTriangle(7, 1, 8);
+					
+			EditMesh->AppendTriangle(3, 9, 4);
+			EditMesh->AppendTriangle(3, 4, 2);
+			EditMesh->AppendTriangle(3, 2, 6);
+			EditMesh->AppendTriangle(3, 6, 8);
+			EditMesh->AppendTriangle(3, 8, 9);
+					
+			EditMesh->AppendTriangle(4, 9, 5);
+			EditMesh->AppendTriangle(2, 4, 11);
+			EditMesh->AppendTriangle(6, 2, 10);
+			EditMesh->AppendTriangle(8, 6, 7);
+			EditMesh->AppendTriangle(9, 8, 1);
+			
+			
 			for (int j = 0; j < iterations; j++)
 			{
-				for (int i=0;i<EditMesh.TriangleCount();i++)
+				TArray<FIntVector3> trisToAdd;
+				TArray<int> trisToRemove;
+				for (int i=0;i<EditMesh->TriangleCount();i++)
 				{
-					auto tri = EditMesh.GetTriangle(i);
+					auto tri = EditMesh->GetTriangle(i);
 					//tri indices for new points between old ones
 					int a = tri.A;
 					int b = tri.B;
@@ -111,23 +114,29 @@ UPARAM(DisplayName = "Target Mesh")UDynamicMesh* UJR_SphereGenerator::AppendIcoS
 					trisToAdd.Add(FIntVector3(c, f, e));
 					trisToAdd.Add(FIntVector3(d, e, f));		
 				}
-			}
-			for (int tri : trisToRemove) {
-				if (EditMesh.IsTriangle(tri)) {
-					EditMesh.RemoveTriangle(tri, false, false);
+				for (int tri : trisToRemove) {
+					if (EditMesh->IsTriangle(tri)) {
+						EditMesh->RemoveTriangle(tri, false, false);
+					}
+					else {
+						int asda = 2;
+					}
 				}
-				else {
-					int asda = 2;
+				for (auto tri : trisToAdd) {
+					EditMesh->AppendTriangle(tri.X, tri.Y, tri.Z);
 				}
 			}
-			for (auto tri : trisToAdd) {
-				EditMesh.AppendTriangle(tri.X,tri.Y,tri.Z);
+			//normalise all vertices
+			for (int i = 0; i < EditMesh->VertexCount(); i++) {
+				auto v = EditMesh->GetVertex(i);
+				v.Normalize();
+				EditMesh->SetVertex(i, v);
 			}
-			 tesco = trisToAdd.Num();
 			
 
-		}, EDynamicMeshChangeType::MeshReplacementChange, EDynamicMeshAttributeChangeFlags::VertexPositions, false);
-		
+		}
+	
+		TargetMesh = UGeometryScriptLibrary_MeshNormalsFunctions::FlipNormals(TargetMesh);
 	return TargetMesh;
 }
 UDynamicMesh* UJR_SphereGenerator::WrapPlaneToSphere(UDynamicMesh* TargetMesh, double sphereRadius)
@@ -249,12 +258,15 @@ float UJR_SphereGenerator::smax(float a, float b, float k)
 	return FMath::Lerp(b, a, h) - k * h * (1.0 - h);
 }
 
-int UJR_SphereGenerator::AppendMidPoint(int a, int b, FDynamicMesh3& EditMesh)
+int UJR_SphereGenerator::AppendMidPoint(int a, int b, FDynamicMesh3* EditMesh)
 {
-	auto v1 = EditMesh.GetVertex(a);
-	auto v2 = EditMesh.GetVertex(b);
+	auto v1 = EditMesh->GetVertex(a);
+	auto v2 = EditMesh->GetVertex(b);
 	FVector3d mid = (v1 + v2) / 2;
-	return EditMesh.AppendVertex(mid);
+
+	mid.Normalize();
+	//mid *= (1.0 + FMath::Sqrt(5.0)) / 2.0;
+	return EditMesh->AppendVertex(mid);
 }
 
 
